@@ -2,89 +2,272 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>متفقد مساجد مكناس</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+  :root {
+    --primary: #2c3e50;
+    --secondary: #34495e;
+    --orange: #e67e22;
+    --orange-dark: #ca650c;
+    --red: #c0392b;
+    --red-dark: #962d22;
+    --green: #27ae60;
+    --green-dark: #1e8449;
+    --blue: #2980b9;
+    --blue-dark: #1f6390;
+    --light-bg: #f9f9f9;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
   body {
     font-family: "Tahoma", sans-serif;
     text-align: center;
-    margin: 0;
-    background: #f9f9f9;
+    background: var(--light-bg);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
+  
   header {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #fff;
     padding: 20px;
     font-size: 24px;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
   }
+  
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,224C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .header-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
   .buttons {
     display: grid;
-    gap: 15px;
-    padding: 25px;
+    gap: 20px;
+    padding: 25px 15px;
   }
+  
   button {
-    padding: 16px;
+    padding: 18px;
     font-size: 18px;
     border: none;
     border-radius: 12px;
     color: white;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
   }
+  
+  button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+  
   button:hover {
-    transform: scale(1.05);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   }
-  .orange { background: #e67e22; }
-  .orange:hover { background: #ca650c; }
-  .red { background: #c0392b; }
-  .red:hover { background: #962d22; }
-  .green { background: #27ae60; }
-  .green:hover { background: #1e8449; }
-  .back { background: #2980b9; }
-  .back:hover { background: #1f6390; }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  .orange { background: var(--orange); }
+  .orange:hover { background: var(--orange-dark); }
+  .red { background: var(--red); }
+  .red:hover { background: var(--red-dark); }
+  .green { background: var(--green); }
+  .green:hover { background: var(--green-dark); }
+  .back { background: var(--blue); }
+  .back:hover { background: var(--blue-dark); }
+  
   iframe {
     width: 100%;
     height: 80vh;
     border: 0;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
   }
+  
+  .loading {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+  }
+  
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(44, 62, 80, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .loading p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: var(--primary);
+  }
+  
+  footer {
+    background: var(--secondary);
+    color: white;
+    padding: 15px;
+    margin-top: auto;
+    font-size: 14px;
+  }
+  
+  @media (max-width: 768px) {
+    header {
+      font-size: 20px;
+      padding: 15px;
+    }
+    
+    button {
+      padding: 16px;
+      font-size: 16px;
+    }
+    
+    .buttons {
+      gap: 15px;
+      padding: 20px 10px;
+    }
+  }
 </style>
 </head>
 <body>
-  <header>📌 متفقد مساجد مكناس</header>
+  <header>
+    <div class="header-content">
+      <i class="fas fa-mosque"></i> متفقد مساجد مكناس
+    </div>
+  </header>
 
-  <div class="buttons" id="menu">
-    <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">📋 غيابات القيمين الدينيين</button>
-    <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">📖 خطبة الجمعة</button>
-    <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">🗣️ الإنابة في الخطابة</button>
+  <div class="container">
+    <div class="buttons" id="menu">
+      <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">
+        <i class="fas fa-user-slash"></i> غيابات القيمين الدينيين
+      </button>
+      <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">
+        <i class="fas fa-book"></i> خطبة الجمعة
+      </button>
+      <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">
+        <i class="fas fa-microphone-alt"></i> الإنابة في الخطابة
+      </button>
+    </div>
+
+    <div class="buttons" id="backBtn" style="display:none">
+      <button class="back" onclick="goHome()">
+        <i class="fas fa-arrow-right"></i> العودة للصفحة الرئيسية
+      </button>
+    </div>
+
+    <iframe id="viewer"></iframe>
   </div>
 
-  <div class="buttons" id="backBtn" style="display:none">
-    <button class="back" onclick="goHome()">⬅️ العودة للصفحة الرئيسية</button>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>جاري التحميل...</p>
   </div>
 
-  <iframe id="viewer"></iframe>
+  <footer>
+    © 2023 متفقد مساجد مكناس - جميع الحقوق محفوظة
+  </footer>
 
 <script>
 function openLink(url){
-  document.getElementById("menu").style.display="none";
-  document.getElementById("backBtn").style.display="block";
-  const f=document.getElementById("viewer");
-  f.style.display="block";
-  f.src=url;
-  setTimeout(()=>f.style.opacity="1",50);
+  // إظهار شاشة التحميل
+  document.getElementById("loading").style.display = "flex";
+  
+  // إخفاء القائمة الرئيسية
+  document.getElementById("menu").style.display = "none";
+  
+  // بعد تأخير بسيط لضمان عرض شاشة التحميل
+  setTimeout(() => {
+    document.getElementById("backBtn").style.display = "block";
+    const f = document.getElementById("viewer");
+    f.style.display = "block";
+    f.src = url;
+    
+    // عند تحميل الإطار، إخفاء شاشة التحميل وإظهار المحتوى
+    f.onload = function() {
+      document.getElementById("loading").style.display = "none";
+      setTimeout(() => f.style.opacity = "1", 50);
+    };
+  }, 500);
 }
+
 function goHome(){
-  const f=document.getElementById("viewer");
-  f.style.opacity="0";
-  setTimeout(()=>{
-    f.style.display="none"; 
-    document.getElementById("backBtn").style.display="none";
-    document.getElementById("menu").style.display="grid";
-  },300);
+  const f = document.getElementById("viewer");
+  f.style.opacity = "0";
+  
+  setTimeout(() => {
+    f.style.display = "none"; 
+    f.src = "";
+    document.getElementById("backBtn").style.display = "none";
+    document.getElementById("menu").style.display = "grid";
+  }, 300);
 }
 </script>
 </body>
