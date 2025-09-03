@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متفقد مساجد مكناس</title>
+<title>متفقد المساجد مكناس</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
 <style>
@@ -295,69 +295,12 @@
     font-weight: bold;
   }
   
-  .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin: 20px 0;
-  }
-  
-  .feature-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-  }
-  
-  .dark-mode .feature-card {
-    background: #2d2d42;
-  }
-  
-  .feature-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .feature-icon {
-    font-size: 40px;
-    color: var(--primary);
-    margin-bottom: 15px;
-  }
-  
-  .feature-card h3 {
-    margin-bottom: 10px;
-    color: var(--primary);
-  }
-  
   footer {
     background: var(--secondary);
     color: white;
     padding: 15px;
     margin-top: auto;
     font-size: 14px;
-  }
-  
-  .notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--green);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 1000;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: var(--transition);
-  }
-  
-  .notification.show {
-    transform: translateY(0);
-    opacity: 1;
   }
   
   @media (max-width: 768px) {
@@ -373,10 +316,6 @@
     button {
       padding: 16px;
       font-size: 16px;
-    }
-    
-    .features {
-      grid-template-columns: 1fr;
     }
     
     .times-container {
@@ -398,58 +337,31 @@
   </header>
 
   <div class="container">
-    <div class="welcome-screen">
+    <div class="welcome-screen" id="welcomeScreen">
       <i class="fas fa-mosque mosque-icon"></i>
       <div class="welcome-text">
-        <h2>مرحباً بك في تطبيق متفقد مساجد مكناس</h2>
-        <p>منصة متكاملة لمتابعة شؤون المساجد والقيمين الدينيين في مدينة مكناس</p>
-      </div>
-    </div>
-
-    <div class="prayer-times">
-      <h3><i class="fas fa-clock"></i> أوقات الصلاة اليوم في مكناس</h3>
-      <div class="times-container" id="prayerTimes">
-        <!-- سيتم ملء هذا القسم بالكود JavaScript -->
-      </div>
-    </div>
-
-    <div class="features">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <i class="fas fa-info-circle"></i>
-        </div>
-        <h3>معلومات عن المساجد</h3>
-        <p>إحصاءات وأرقام عن مساجد مدينة مكناس وتاريخها العريق</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <i class="fas fa-calendar-alt"></i>
-        </div>
-        <h3>الفعاليات والأنشطة</h3>
-        <p>تعرف على الفعاليات الدينية والثقافية في مساجد مكناس</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <i class="fas fa-question-circle"></i>
-        </div>
-        <h3>الدعم والمساندة</h3>
-        <p>خدمات الدعم الفني والاستشارات للقيمين الدينيين</p>
+        <h2>مرحباً بك في تطبيق متفقد المساجد </h2>
+        <p>تتبع أحوال المساجد والقيمين الدينيين مكناس </p>
       </div>
     </div>
 
     <div class="buttons" id="menu">
       <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">
-        <i class="fas fa-user-slash"></i> غيابات القيمين الدينيين
+        <i class="fas fa-user-slash"></i> تتبع غياب القيمين الدينيين
       </button>
       <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">
         <i class="fas fa-book"></i> خطبة الجمعة
       </button>
       <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">
-        <i class="fas fa-microphone-alt"></i> الإنابة في الخطابة
+        <i class="fas fa-microphone-alt"></i> تتبع الإنابة في الخطابة
       </button>
-      <button class="gold" onclick="showNotification()">
-        <i class="fas fa-bell"></i> تفعيل التذكيرات
-      </button>
+    </div>
+
+    <div class="prayer-times" id="prayerTimesSection">
+      <h3><i class="fas fa-clock"></i> أوقات الصلاة اليوم في مكناس</h3>
+      <div class="times-container" id="prayerTimes">
+        <!-- سيتم ملء هذا القسم بالكود JavaScript -->
+      </div>
     </div>
 
     <div class="buttons" id="backBtn" style="display:none">
@@ -466,13 +378,8 @@
     <p>جاري التحميل...</p>
   </div>
 
-  <div class="notification" id="notification">
-    <i class="fas fa-bell"></i>
-    <div>تم تفعيل التذكير بأوقات الصلاة!</div>
-  </div>
-
   <footer>
-    © 2023 متفقد مساجد مكناس - جميع الحقوق محفوظة
+    © 2025 متفقد المساجد مكناس - جميع الحقوق محفوظة
   </footer>
 
 <script>
@@ -516,16 +423,6 @@ function displayPrayerTimes() {
   });
 }
 
-// دالة لإظهار الإشعارات
-function showNotification() {
-  const notification = document.getElementById('notification');
-  notification.classList.add('show');
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 3000);
-}
-
 // دالة للتبديل بين الوضع الليلي والنهاري
 function setupThemeToggle() {
   const themeToggle = document.getElementById('themeToggle');
@@ -554,6 +451,10 @@ function setupThemeToggle() {
 }
 
 function openLink(url){
+  // إخفاء شاشة الترحيب وأوقات الصلاة
+  document.getElementById("welcomeScreen").style.display = "none";
+  document.getElementById("prayerTimesSection").style.display = "none";
+  
   // إظهار شاشة التحميل
   document.getElementById("loading").style.display = "flex";
   
@@ -584,6 +485,10 @@ function goHome(){
     f.src = "";
     document.getElementById("backBtn").style.display = "none";
     document.getElementById("menu").style.display = "grid";
+    
+    // إعادة إظهار شاشة الترحيب وأوقات الصلاة
+    document.getElementById("welcomeScreen").style.display = "flex";
+    document.getElementById("prayerTimesSection").style.display = "block";
   }, 300);
 }
 
