@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>متفقد مساجد مكناس</title>
-  <style>
-    body {
-      font-family: "Tahoma", sans-serif;
-      text-align: center;
-      background: #fdfdfd;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 20px;
-      font-size: 26px;
-      font-weight: bold;
-    }
-    .logo {
-      margin: 20px auto;
-      width: 120px;
-    }
-    .buttons {
-      display: grid;
-      gap: 15px;
-      padding: 20px;
-    }
-    button {
-      padding: 20px;
-      font-size: 20px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      color: white;
-      transition: 0.3s;
-    }
-    .blue { background: #1f4788; }
-    .blue:hover { background: #16355f; }
-    .orange { background: #e67e22; }
-    .orange:hover { background: #ca650c; }
-    .red { background: #c0392b; }
-    .red:hover { background: #962d22; }
-    .green { background: #27ae60; }
-    .green:hover { background: #1e8449; }
-
-    iframe {
-      width: 100%;
-      height: 80vh;
-      border: none;
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>متفقد مساجد مكناس</title>
+<style>
+  body {
+    font-family: "Tahoma", sans-serif;
+    text-align: center;
+    margin: 0;
+    background: #f9f9f9;
+  }
+  header {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .buttons {
+    display: grid;
+    gap: 15px;
+    padding: 25px;
+  }
+  button {
+    padding: 16px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+  button:hover {
+    transform: scale(1.05);
+  }
+  .orange { background: #e67e22; }
+  .orange:hover { background: #ca650c; }
+  .red { background: #c0392b; }
+  .red:hover { background: #962d22; }
+  .green { background: #27ae60; }
+  .green:hover { background: #1e8449; }
+  .back { background: #2980b9; }
+  .back:hover { background: #1f6390; }
+  iframe {
+    width: 100%;
+    height: 80vh;
+    border: 0;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+</style>
 </head>
 <body>
-  <header>متفقد مساجد مكناس</header>
+  <header>📌 متفقد مساجد مكناس</header>
 
-  <img class="logo" src="https://i.ibb.co/qg6zBv0/mosque.png" alt="mosque">
-
-  <div class="buttons">
-    <button class="blue" onclick="openLink('https://script.google.com/macros/s/AKfycbzgjQXL7h68ebcppS236KF1LClPYUjPIJzOq64U722-6yySkPpgbQMByronKivNvlwp/exec')">🕌 شبكة التفقد</button>
+  <div class="buttons" id="menu">
     <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">📋 غيابات القيمين الدينيين</button>
     <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">📖 خطبة الجمعة</button>
     <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">🗣️ الإنابة في الخطابة</button>
   </div>
 
+  <div class="buttons" id="backBtn" style="display:none">
+    <button class="back" onclick="goHome()">⬅️ العودة للصفحة الرئيسية</button>
+  </div>
+
   <iframe id="viewer"></iframe>
 
-  <script>
-    function openLink(url) {
-      document.querySelector('.buttons').style.display = "none";
-      const frame = document.getElementById("viewer");
-      frame.style.display = "block";
-      frame.src = url;
-    }
-  </script>
+<script>
+function openLink(url){
+  document.getElementById("menu").style.display="none";
+  document.getElementById("backBtn").style.display="block";
+  const f=document.getElementById("viewer");
+  f.style.display="block";
+  f.src=url;
+  setTimeout(()=>f.style.opacity="1",50);
+}
+function goHome(){
+  const f=document.getElementById("viewer");
+  f.style.opacity="0";
+  setTimeout(()=>{
+    f.style.display="none"; 
+    document.getElementById("backBtn").style.display="none";
+    document.getElementById("menu").style.display="grid";
+  },300);
+}
+</script>
 </body>
 </html>
