@@ -250,49 +250,84 @@
     color: var(--primary);
   }
   
-  .prayer-times {
+  .azkar-container {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
     margin: 20px 0;
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
-  .prayer-times h3 {
-    margin-bottom: 15px;
+  .azkar-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,160C960,139,1056,149,1152,165.3C1248,181,1344,203,1392,213.3L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .azkar-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
   }
   
-  .times-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  .azkar-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .zekr {
+    animation: fadeIn 1s ease;
+    margin-bottom: 15px;
+  }
+  
+  .zekr-text {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .zekr-count {
+    font-size: 16px;
+    opacity: 0.8;
+  }
+  
+  .azkar-controls {
+    display: flex;
+    justify-content: center;
     gap: 10px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
   }
   
-  .prayer-time {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 8px;
+  .azkar-controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
   }
   
-  .prayer-time.active {
-    background: var(--gold);
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .prayer-name {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .prayer-hour {
-    font-size: 18px;
-    font-weight: bold;
+  .azkar-controls button:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
   
   footer {
@@ -318,8 +353,8 @@
       font-size: 16px;
     }
     
-    .times-container {
-      grid-template-columns: repeat(3, 1fr);
+    .zekr-text {
+      font-size: 18px;
     }
   }
 </style>
@@ -341,7 +376,7 @@
       <i class="fas fa-mosque mosque-icon"></i>
       <div class="welcome-text">
         <h2>مرحباً بك في تطبيق متفقد المساجد </h2>
-        <p>تتبع أحوال المساجد والقيمين الدينيين مكناس </p>
+        <p>تتبع أحوال المساجد والقيمين الدينيين مكناس</p>
       </div>
     </div>
 
@@ -357,10 +392,24 @@
       </button>
     </div>
 
-    <div class="prayer-times" id="prayerTimesSection">
-      <h3><i class="fas fa-clock"></i> أوقات الصلاة اليوم في مكناس</h3>
-      <div class="times-container" id="prayerTimes">
+    <div class="azkar-container" id="azkarSection">
+      <div class="azkar-title">
+        <i class="fas fa-praying-hands"></i>
+        <h3>أذكار المسلم</h3>
+      </div>
+      <div class="azkar-content" id="azkarContent">
         <!-- سيتم ملء هذا القسم بالكود JavaScript -->
+      </div>
+      <div class="azkar-controls">
+        <button onclick="changeZekrManual('prev')">
+          <i class="fas fa-arrow-right"></i> السابق
+        </button>
+        <button onclick="toggleAzkar()" id="toggleAzkarBtn">
+          <i class="fas fa-pause"></i> إيقاف
+        </button>
+        <button onclick="changeZekrManual('next')">
+          التالي <i class="fas fa-arrow-left"></i>
+        </button>
       </div>
     </div>
 
@@ -383,44 +432,111 @@
   </footer>
 
 <script>
-// أوقات الصلاة لمدينة مكناس (مثال)
-const prayerTimes = [
-  { name: "الفجر", time: "05:12" },
-  { name: "الشروق", time: "06:45" },
-  { name: "الظهر", time: "12:30" },
-  { name: "العصر", time: "15:45" },
-  { name: "المغرب", time: "18:55" },
-  { name: "العشاء", time: "20:15" }
+// مجموعة من الأذكار الإسلامية مع عدد مرات تكرارها
+const azkar = [
+  {
+    text: "سبحان الله وبحمده، سبحان الله العظيم",
+    count: "100",
+    description: "من قالها حطت خطاياه وإن كانت مثل زبد البحر"
+  },
+  {
+    text: "أستغفر الله العظيم الذي لا إله إلا هو الحي القيوم وأتوب إليه",
+    count: "100",
+    description: "كفارة المجلس ومغفرة الذنوب"
+  },
+  {
+    text: "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير",
+    count: "100",
+    description: "كانت له عدل عشر رقاب، وكتبت له مئة حسنة، ومحيت عنه مئة سيئة"
+  },
+  {
+    text: "اللهم صل وسلم على نبينا محمد",
+    count: "100",
+    description: "من صلى على النبي صلى الله عليه وسلم مرة صلى الله عليه بها عشراً"
+  },
+  {
+    text: "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر",
+    count: "100",
+    description: "حبوات من الرحمن ومحبوبات له، ثقيلات في الميزان"
+  },
+  {
+    text: "لا حول ولا قوة إلا بالله",
+    count: "100",
+    description: "كنز من كنوز الجنة"
+  },
+  {
+    text: "رضيت بالله ربا، وبالإسلام دينا، وبمحمد صلى الله عليه وسلم نبيا",
+    count: "3",
+    description: "من قالها ثلاثاً حين يصبح وحين يمسي كان حقاً على الله أن يرضيه"
+  },
+  {
+    text: "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم",
+    count: "7",
+    description: "من قالها كفاه الله ما أهمه من أمر الدنيا والآخرة"
+  }
 ];
 
-// دالة لعرض أوقات الصلاة
-function displayPrayerTimes() {
-  const container = document.getElementById('prayerTimes');
-  const now = new Date();
-  const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+let currentZekrIndex = 0;
+let azkarInterval;
+let isAzkarPlaying = true;
+
+// دالة لعرض الذكر الحالي
+function displayCurrentZekr() {
+  const container = document.getElementById('azkarContent');
+  const zekr = azkar[currentZekrIndex];
   
-  let activeIndex = 0;
-  let found = false;
-  
-  for (let i = prayerTimes.length - 1; i >= 0; i--) {
-    if (currentTime < prayerTimes[i].time) {
-      activeIndex = i;
-      found = true;
-      break;
-    }
+  container.innerHTML = `
+    <div class="zekr">
+      <div class="zekr-text">${zekr.text}</div>
+      <div class="zekr-count">التكرار: ${zekr.count} مرة - ${zekr.description}</div>
+    </div>
+  `;
+}
+
+// دالة للانتقال إلى الذكر التالي
+function nextZekr() {
+  currentZekrIndex = (currentZekrIndex + 1) % azkar.length;
+  displayCurrentZekr();
+}
+
+// دالة للانتقال إلى الذكر السابق
+function prevZekr() {
+  currentZekrIndex = (currentZekrIndex - 1 + azkar.length) % azkar.length;
+  displayCurrentZekr();
+}
+
+// دالة للتغيير اليدوي للذكر
+function changeZekrManual(direction) {
+  if (direction === 'next') {
+    nextZekr();
+  } else {
+    prevZekr();
   }
   
-  container.innerHTML = '';
-  prayerTimes.forEach((prayer, index) => {
-    const isActive = index === activeIndex && found;
-    const prayerElement = document.createElement('div');
-    prayerElement.className = `prayer-time ${isActive ? 'active' : ''}`;
-    prayerElement.innerHTML = `
-      <div class="prayer-name">${prayer.name}</div>
-      <div class="prayer-hour">${prayer.time}</div>
-    `;
-    container.appendChild(prayerElement);
-  });
+  // إعادة ضبط المؤقت عند التغيير اليدوي
+  resetAzkarInterval();
+}
+
+// دالة لإعادة ضبط interval الأذكار
+function resetAzkarInterval() {
+  clearInterval(azkarInterval);
+  if (isAzkarPlaying) {
+    azkarInterval = setInterval(nextZekr, 10000); // تغيير كل 10 ثوان
+  }
+}
+
+// دالة لإيقاف أو تشغيل الأذكار
+function toggleAzkar() {
+  isAzkarPlaying = !isAzkarPlaying;
+  const toggleBtn = document.getElementById('toggleAzkarBtn');
+  
+  if (isAzkarPlaying) {
+    toggleBtn.innerHTML = '<i class="fas fa-pause"></i> إيقاف';
+    azkarInterval = setInterval(nextZekr, 10000);
+  } else {
+    toggleBtn.innerHTML = '<i class="fas fa-play"></i> تشغيل';
+    clearInterval(azkarInterval);
+  }
 }
 
 // دالة للتبديل بين الوضع الليلي والنهاري
@@ -451,15 +567,18 @@ function setupThemeToggle() {
 }
 
 function openLink(url){
-  // إخفاء شاشة الترحيب وأوقات الصلاة
+  // إخفاء شاشة الترحيب والأذكار
   document.getElementById("welcomeScreen").style.display = "none";
-  document.getElementById("prayerTimesSection").style.display = "none";
+  document.getElementById("azkarSection").style.display = "none";
   
   // إظهار شاشة التحميل
   document.getElementById("loading").style.display = "flex";
   
   // إخفاء القائمة الرئيسية
   document.getElementById("menu").style.display = "none";
+  
+  // إيقاف عرض الأذكار مؤقتاً
+  clearInterval(azkarInterval);
   
   // بعد تأخير بسيط لضمان عرض شاشة التحميل
   setTimeout(() => {
@@ -486,19 +605,22 @@ function goHome(){
     document.getElementById("backBtn").style.display = "none";
     document.getElementById("menu").style.display = "grid";
     
-    // إعادة إظهار شاشة الترحيب وأوقات الصلاة
+    // إعادة إظهار شاشة الترحيب والأذكار
     document.getElementById("welcomeScreen").style.display = "flex";
-    document.getElementById("prayerTimesSection").style.display = "block";
+    document.getElementById("azkarSection").style.display = "block";
+    
+    // إعادة تشغيل عرض الأذكار
+    resetAzkarInterval();
   }, 300);
 }
 
 // تهيئة التطبيق عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
-  displayPrayerTimes();
+  displayCurrentZekr();
   setupThemeToggle();
   
-  // تحديث أوقات الصلاة كل دقيقة
-  setInterval(displayPrayerTimes, 60000);
+  // بدء عرض الأذكار بشكل تلقائي
+  azkarInterval = setInterval(nextZekr, 10000); // تغيير كل 10 ثوان
 });
 </script>
 </body>
