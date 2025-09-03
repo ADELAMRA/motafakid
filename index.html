@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>متفقد مساجد مكناس</title>
+  <style>
+    body {
+      font-family: "Tahoma", sans-serif;
+      text-align: center;
+      background: #fdfdfd;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .logo {
+      margin: 20px auto;
+      width: 120px;
+    }
+    .buttons {
+      display: grid;
+      gap: 15px;
+      padding: 20px;
+    }
+    button {
+      padding: 20px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s;
+    }
+    .blue { background: #1f4788; }
+    .blue:hover { background: #16355f; }
+    .orange { background: #e67e22; }
+    .orange:hover { background: #ca650c; }
+    .red { background: #c0392b; }
+    .red:hover { background: #962d22; }
+    .green { background: #27ae60; }
+    .green:hover { background: #1e8449; }
+
+    iframe {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>متفقد مساجد مكناس</header>
+
+  <img class="logo" src="https://i.ibb.co/qg6zBv0/mosque.png" alt="mosque">
+
+  <div class="buttons">
+    <button class="blue" onclick="openLink('https://script.google.com/macros/s/AKfycbzgjQXL7h68ebcppS236KF1LClPYUjPIJzOq64U722-6yySkPpgbQMByronKivNvlwp/exec')">🕌 شبكة التفقد</button>
+    <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">📋 غيابات القيمين الدينيين</button>
+    <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">📖 خطبة الجمعة</button>
+    <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">🗣️ الإنابة في الخطابة</button>
+  </div>
+
+  <iframe id="viewer"></iframe>
+
+  <script>
+    function openLink(url) {
+      document.querySelector('.buttons').style.display = "none";
+      const frame = document.getElementById("viewer");
+      frame.style.display = "block";
+      frame.src = url;
+    }
+  </script>
+</body>
+</html>
