@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متفقد المساجد</title>
+<title>متفقد المساجد مكناس</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap">
 <style>
@@ -200,6 +200,39 @@
     align-items: center;
   }
   
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+  }
+  
+  .admin-controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .admin-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  
+  .admin-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+  
   .theme-toggle {
     background: rgba(255, 255, 255, 0.2);
     border: none;
@@ -316,6 +349,8 @@
   .back:hover { background: var(--blue-dark); }
   .gold { background: var(--gold); color: #333; }
   .gold:hover { background: var(--gold-dark); }
+  .purple { background: #8e44ad; }
+  .purple:hover { background: #6c3483; }
   
   iframe {
     width: 100%;
@@ -473,6 +508,81 @@
     transform: translateY(-2px);
   }
   
+  /* لوحة التحكم */
+  .admin-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+  
+  .dark-mode .admin-panel {
+    background: #2d2d42;
+  }
+  
+  .admin-panel h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .login-history {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .dark-mode .login-history {
+    border-color: #444;
+  }
+  
+  .login-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dark-mode .login-item {
+    border-bottom-color: #444;
+  }
+  
+  .login-item:last-child {
+    border-bottom: none;
+  }
+  
+  .login-time {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .dark-mode .login-time {
+    color: #aaa;
+  }
+  
+  .clear-history {
+    margin-top: 15px;
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .clear-history:hover {
+    background: var(--red-dark);
+  }
+  
   footer {
     background: var(--secondary);
     color: white;
@@ -485,6 +595,11 @@
     header {
       font-size: 20px;
       padding: 15px;
+    }
+    
+    .header-content {
+      flex-direction: column;
+      gap: 10px;
     }
     
     .buttons {
@@ -518,6 +633,11 @@
     .login-container {
       padding: 20px;
     }
+    
+    .login-item {
+      flex-direction: column;
+      gap: 5px;
+    }
   }
 </style>
 </head>
@@ -529,13 +649,17 @@
       <h2 class="login-title">تطبيق متفقد المساجد - مكناس</h2>
       <div class="login-form">
         <div class="input-group">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="passwordInput" placeholder="أدخل رمز الدخول" autocomplete="off">
+          <i class="fas fa-user"></i>
+          <input type="text" id="usernameInput" placeholder="اسم المستخدم" autocomplete="off">
         </div>
-        <button class="login-btn" onclick="checkPassword()">
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="passwordInput" placeholder="كلمة المرور" autocomplete="off">
+        </div>
+        <button class="login-btn" onclick="checkLogin()">
           <i class="fas fa-sign-in-alt"></i> دخول
         </button>
-        <div class="error-message" id="errorMessage">رمز الدخول غير صحيح</div>
+        <div class="error-message" id="errorMessage">بيانات الدخول غير صحيحة</div>
       </div>
     </div>
   </div>
@@ -547,9 +671,18 @@
         <div>
           <i class="fas fa-mosque"></i> متفقد المساجد
         </div>
-        <button class="theme-toggle" id="themeToggle">
-          <i class="fas fa-moon"></i>
-        </button>
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span id="currentUser">مرحباً!</span>
+        </div>
+        <div class="admin-controls" id="adminControls" style="display: none;">
+          <button class="admin-btn" onclick="toggleAdminPanel()" title="سجل الدخول">
+            <i class="fas fa-history"></i>
+          </button>
+          <button class="theme-toggle" id="themeToggle" title="تبديل المظهر">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -571,6 +704,17 @@
         </button>
         <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">
           <i class="fas fa-microphone-alt"></i> تتبع الإنابة في الخطابة
+        </button>
+      </div>
+
+      <!-- لوحة التحكم وسجل الدخول (للمدير فقط) -->
+      <div class="admin-panel" id="adminPanel">
+        <h3><i class="fas fa-users"></i> سجل الدخول إلى النظام</h3>
+        <div class="login-history" id="loginHistory">
+          <!-- سيتم ملء هذا القسم بسجل الدخول -->
+        </div>
+        <button class="clear-history" onclick="clearLoginHistory()">
+          <i class="fas fa-trash"></i> مسح السجل
         </button>
       </div>
 
@@ -618,8 +762,23 @@
   </div>
 
 <script>
-// كلمة المرور الافتراضية (يمكن تغييرها)
-const CORRECT_PASSWORD = "MKS2025";
+// بيانات المستخدمين المسموح لهم بالدخول
+const USERS = {
+  "ELAMRAOUI": "MKS@2025", // المدير - يستطيع رؤية سجل الدخول
+  "HMKS": "2025",   // مدير آخر
+  "MKSH": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSBL": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSBE": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSG": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSR": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSY": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSN": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSL": "2025" // مستخدم عادي - لا يرى سجل الدخول
+  "MKSC": "2025" // مستخدم عادي - لا يرى سجل الدخول 
+};
+
+// سجل الدخول
+let loginHistory = JSON.parse(localStorage.getItem('loginHistory')) || [];
 
 // مجموعة من الأذكار الإسلامية مع عدد مرات تكرارها
 const azkar = [
@@ -637,27 +796,55 @@ const azkar = [
     text: "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير",
     count: "100",
     description: "كانت له عدل عشر رقاب، وكتبت له مئة حسنة، ومحيت عنه مئة سيئة"
-  },
-  {
-    text: "اللهم صل وسلم على نبينا محمد",
-    count: "100",
-    description: "من صلى على النبي صلى الله عليه وسلم مرة صلى الله عليه بها عشراً"
   }
 ];
 
 let currentZekrIndex = 0;
 let azkarInterval;
 let isAzkarPlaying = true;
+let currentUsername = "";
+let isAdmin = false;
 
-// دالة التحقق من كلمة المرور
-function checkPassword() {
+// دالة التحقق من بيانات الدخول
+function checkLogin() {
+  const usernameInput = document.getElementById('usernameInput');
   const passwordInput = document.getElementById('passwordInput');
   const errorMessage = document.getElementById('errorMessage');
   const loginScreen = document.getElementById('loginScreen');
   const appContent = document.getElementById('appContent');
+  const adminControls = document.getElementById('adminControls');
   
-  if (passwordInput.value === CORRECT_PASSWORD) {
-    // كلمة المرور صحيحة
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
+  
+  if (USERS[username] && USERS[username] === password) {
+    // بيانات الدخول صحيحة
+    currentUsername = username;
+    
+    // التحقق إذا كان المستخدم مديراً
+    isAdmin = (username === "admin"); // فقط المستخدم "admin" يعتبر مديراً
+    
+    // تسجيل عملية الدخول
+    const loginRecord = {
+      username: username,
+      timestamp: new Date().toLocaleString('ar-SA'),
+      time: new Date().getTime()
+    };
+    
+    loginHistory.unshift(loginRecord);
+    
+    // حفظ سجل الدخول في localStorage
+    localStorage.setItem('loginHistory', JSON.stringify(loginHistory));
+    
+    // تحديث واجهة المستخدم
+    document.getElementById('currentUser').textContent = `مرحباً ${username}`;
+    
+    // إظهار أزرار التحكم للمدير فقط
+    if (isAdmin) {
+      adminControls.style.display = 'flex';
+    }
+    
+    // إخفاء شاشة الدخول وإظهار المحتوى
     loginScreen.style.opacity = '0';
     setTimeout(() => {
       loginScreen.style.display = 'none';
@@ -667,11 +854,13 @@ function checkPassword() {
       initApp();
     }, 500);
   } else {
-    // كلمة المرور خاطئة
+    // بيانات الدخول خاطئة
     errorMessage.style.display = 'block';
+    usernameInput.style.borderColor = 'var(--red)';
     passwordInput.style.borderColor = 'var(--red)';
     setTimeout(() => {
       errorMessage.style.display = 'none';
+      usernameInput.style.borderColor = '';
       passwordInput.style.borderColor = '';
     }, 3000);
   }
@@ -680,9 +869,52 @@ function checkPassword() {
 // السماح بالدخول عند الضغط على Enter
 document.getElementById('passwordInput').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
-    checkPassword();
+    checkLogin();
   }
 });
+
+// عرض سجل الدخول
+function displayLoginHistory() {
+  const historyContainer = document.getElementById('loginHistory');
+  
+  if (loginHistory.length === 0) {
+    historyContainer.innerHTML = '<div class="login-item">لا توجد سجلات دخول</div>';
+    return;
+  }
+  
+  historyContainer.innerHTML = '';
+  
+  loginHistory.slice(0, 20).forEach(record => {
+    const loginItem = document.createElement('div');
+    loginItem.className = 'login-item';
+    loginItem.innerHTML = `
+      <div><strong>${record.username}</strong></div>
+      <div class="login-time">${record.timestamp}</div>
+    `;
+    historyContainer.appendChild(loginItem);
+  });
+}
+
+// مسح سجل الدخول
+function clearLoginHistory() {
+  if (confirm("هل أنت متأكد من رغبتك في مسح سجل الدخول؟")) {
+    loginHistory = [];
+    localStorage.setItem('loginHistory', JSON.stringify(loginHistory));
+    displayLoginHistory();
+  }
+}
+
+// تبديل عرض لوحة التحكم
+function toggleAdminPanel() {
+  const adminPanel = document.getElementById('adminPanel');
+  
+  if (adminPanel.style.display === 'block') {
+    adminPanel.style.display = 'none';
+  } else {
+    adminPanel.style.display = 'block';
+    displayLoginHistory();
+  }
+}
 
 // دالة لعرض الذكر الحالي
 function displayCurrentZekr() {
@@ -788,6 +1020,7 @@ function openLink(url){
   // إخفاء شاشة الترحيب والأذكار
   document.getElementById("welcomeScreen").style.display = "none";
   document.getElementById("azkarSection").style.display = "none";
+  document.getElementById("adminPanel").style.display = "none";
   
   // إظهار شاشة التحميل
   document.getElementById("loading").style.display = "flex";
@@ -839,7 +1072,7 @@ function initApp() {
   setupThemeToggle();
   
   // بدء عرض الأذكار بشكل تلقائي
-  azkarInterval = setInterval(nextZekr, 10000); // تغيير كل 10 ثوان
+  azkarInterval = setInterval(nextZekr, 10000);
 }
 </script>
 </body>
