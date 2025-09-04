@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متفقد المساجد مكناس</title>
+<title>متفقد المساجد</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap">
 <style>
@@ -50,6 +50,123 @@
     display: flex;
     flex-direction: column;
     transition: var(--transition);
+  }
+  
+  /* شاشة الدخول */
+  .login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    transition: opacity 0.5s ease;
+  }
+  
+  .login-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: var(--shadow-dark);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.8s ease;
+  }
+  
+  .dark-mode .login-container {
+    background: rgba(26, 26, 46, 0.95);
+  }
+  
+  .login-logo {
+    font-size: 60px;
+    color: var(--primary);
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .login-title {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-group {
+    position: relative;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: var(--transition);
+  }
+  
+  .dark-mode .input-group input {
+    background: #2d2d42;
+    border-color: #444;
+    color: white;
+  }
+  
+  .input-group input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.2);
+  }
+  
+  .input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+  }
+  
+  .login-btn {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .login-btn:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+  }
+  
+  .error-message {
+    color: var(--red);
+    margin-top: 10px;
+    font-size: 14px;
+    display: none;
+  }
+  
+  /* محتوى التطبيق */
+  .app-content {
+    display: none;
+    width: 100%;
   }
   
   header {
@@ -266,7 +383,7 @@
   
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+     50% { transform: translateY(-10px); }
   }
   
   .loading p {
@@ -397,85 +514,113 @@
       flex: 1;
       min-width: 100px;
     }
+    
+    .login-container {
+      padding: 20px;
+    }
   }
 </style>
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <div>
-        <i class="fas fa-mosque"></i> متفقد المساجد
-      </div>
-      <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-      </button>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="welcome-screen" id="welcomeScreen">
-      <i class="fas fa-mosque mosque-icon"></i>
-      <div class="welcome-text">
-        <h2>مرحباً بك في تطبيق متفقد المساجد</h2>
-        <p>تتبع أحوال المساجد والقيمين الدينيين في مدينة مكناس</p>
-      </div>
-    </div>
-
-    <div class="buttons" id="menu">
-      <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">
-        <i class="fas fa-user-slash"></i> تتبع غياب القيمين الدينيين
-      </button>
-      <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">
-        <i class="fas fa-book"></i> خطبة الجمعة
-      </button>
-      <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">
-        <i class="fas fa-microphone-alt"></i> تتبع الإنابة في الخطابة
-      </button>
-    </div>
-
-    <div class="azkar-container" id="azkarSection">
-      <div class="azkar-title">
-        <i class="fas fa-praying-hands"></i>
-        <h3>أذكار المسلم</h3>
-      </div>
-      <div class="azkar-content" id="azkarContent">
-        <!-- سيتم ملء هذا القسم بالكود JavaScript -->
-      </div>
-      <div class="azkar-controls">
-        <button onclick="changeZekrManual('prev')">
-          <i class="fas fa-arrow-right"></i> السابق
+  <!-- شاشة الدخول -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-container">
+      <i class="fas fa-mosque login-logo"></i>
+      <h2 class="login-title">تطبيق متفقد المساجد - مكناس</h2>
+      <div class="login-form">
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="passwordInput" placeholder="أدخل رمز الدخول" autocomplete="off">
+        </div>
+        <button class="login-btn" onclick="checkPassword()">
+          <i class="fas fa-sign-in-alt"></i> دخول
         </button>
-        <button onclick="toggleAzkar()" id="toggleAzkarBtn">
-          <i class="fas fa-pause"></i> إيقاف
-        </button>
-        <button onclick="changeZekrManual('next')">
-          التالي <i class="fas fa-arrow-left"></i>
-        </button>
+        <div class="error-message" id="errorMessage">رمز الدخول غير صحيح</div>
       </div>
     </div>
-
-    <div class="buttons" id="backBtn" style="display:none">
-      <button class="back" onclick="goHome()">
-        <i class="fas fa-arrow-right"></i> العودة للصفحة الرئيسية
-      </button>
-    </div>
-
-    <iframe id="viewer"></iframe>
   </div>
 
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-    </div>
-    <p>جاري التحميل...</p>
-  </div>
+  <!-- محتوى التطبيق الرئيسي -->
+  <div class="app-content" id="appContent">
+    <header>
+      <div class="header-content">
+        <div>
+          <i class="fas fa-mosque"></i> متفقد المساجد
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
 
-  <footer>
-    © 2025 متفقد المساجد مكناس - جميع الحقوق محفوظة
-  </footer>
+    <div class="container">
+      <div class="welcome-screen" id="welcomeScreen">
+        <i class="fas fa-mosque mosque-icon"></i>
+        <div class="welcome-text">
+          <h2>مرحباً بك في تطبيق متفقد المساجد</h2>
+          <p>تتبع أحوال المساجد والقيمين الدينيين في مدينة مكناس</p>
+        </div>
+      </div>
+
+      <div class="buttons" id="menu">
+        <button class="orange" onclick="openLink('https://forms.gle/7wgpAM6DcBzdPkUp9')">
+          <i class="fas fa-user-slash"></i> تتبع غياب القيمين الدينيين
+        </button>
+        <button class="red" onclick="openLink('https://forms.gle/bobrCSqjG5Wt9r4t8')">
+          <i class="fas fa-book"></i> خطبة الجمعة
+        </button>
+        <button class="green" onclick="openLink('https://forms.gle/rhWLZPEjk9bZFbmc6')">
+          <i class="fas fa-microphone-alt"></i> تتبع الإنابة في الخطابة
+        </button>
+      </div>
+
+      <div class="azkar-container" id="azkarSection">
+        <div class="azkar-title">
+          <i class="fas fa-praying-hands"></i>
+          <h3>أذكار المسلم</h3>
+        </div>
+        <div class="azkar-content" id="azkarContent">
+          <!-- سيتم ملء هذا القسم بالكود JavaScript -->
+        </div>
+        <div class="azkar-controls">
+          <button onclick="changeZekrManual('prev')">
+            <i class="fas fa-arrow-right"></i> السابق
+          </button>
+          <button onclick="toggleAzkar()" id="toggleAzkarBtn">
+            <i class="fas fa-pause"></i> إيقاف
+          </button>
+          <button onclick="changeZekrManual('next')">
+            التالي <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="buttons" id="backBtn" style="display:none">
+        <button class="back" onclick="goHome()">
+          <i class="fas fa-arrow-right"></i> العودة للصفحة الرئيسية
+        </button>
+      </div>
+
+      <iframe id="viewer"></iframe>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <p>جاري التحميل...</p>
+    </div>
+
+    <footer>
+      © 2025 متفقد المساجد مكناس - جميع الحقوق محفوظة
+    </footer>
+  </div>
 
 <script>
+// كلمة المرور الافتراضية (يمكن تغييرها)
+const CORRECT_PASSWORD = "12345";
+
 // مجموعة من الأذكار الإسلامية مع عدد مرات تكرارها
 const azkar = [
   {
@@ -497,32 +642,47 @@ const azkar = [
     text: "اللهم صل وسلم على نبينا محمد",
     count: "100",
     description: "من صلى على النبي صلى الله عليه وسلم مرة صلى الله عليه بها عشراً"
-  },
-  {
-    text: "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر",
-    count: "100",
-    description: "حبوات من الرحمن ومحبوبات له، ثقيلات في الميزان"
-  },
-  {
-    text: "لا حول ولا قوة إلا بالله",
-    count: "100",
-    description: "كنز من كنوز الجنة"
-  },
-  {
-    text: "رضيت بالله ربا، وبالإسلام دينا، وبمحمد صلى الله عليه وسلم نبيا",
-    count: "3",
-    description: "من قالها ثلاثاً حين يصبح وحين يمسي كان حقاً على الله أن يرضيه"
-  },
-  {
-    text: "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم",
-    count: "7",
-    description: "من قالها كفاه الله ما أهمه من أمر الدنيا والآخرة"
   }
 ];
 
 let currentZekrIndex = 0;
 let azkarInterval;
 let isAzkarPlaying = true;
+
+// دالة التحقق من كلمة المرور
+function checkPassword() {
+  const passwordInput = document.getElementById('passwordInput');
+  const errorMessage = document.getElementById('errorMessage');
+  const loginScreen = document.getElementById('loginScreen');
+  const appContent = document.getElementById('appContent');
+  
+  if (passwordInput.value === 12345) {
+    // كلمة المرور صحيحة
+    loginScreen.style.opacity = '0';
+    setTimeout(() => {
+      loginScreen.style.display = 'none';
+      appContent.style.display = 'block';
+      
+      // تهيئة التطبيق بعد الدخول
+      initApp();
+    }, 500);
+  } else {
+    // كلمة المرور خاطئة
+    errorMessage.style.display = 'block';
+    passwordInput.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      errorMessage.style.display = 'none';
+      passwordInput.style.borderColor = '';
+    }, 3000);
+  }
+}
+
+// السماح بالدخول عند الضغط على Enter
+document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    checkPassword();
+  }
+});
 
 // دالة لعرض الذكر الحالي
 function displayCurrentZekr() {
@@ -673,14 +833,14 @@ function goHome(){
   }, 300);
 }
 
-// تهيئة التطبيق عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', () => {
+// تهيئة التطبيق بعد الدخول
+function initApp() {
   displayCurrentZekr();
   setupThemeToggle();
   
   // بدء عرض الأذكار بشكل تلقائي
   azkarInterval = setInterval(nextZekr, 10000); // تغيير كل 10 ثوان
-});
+}
 </script>
 </body>
 </html>
