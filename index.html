@@ -619,7 +619,7 @@
 
 <script>
 // كلمة المرور الافتراضية (يمكن تغييرها)
-const CORRECT_PASSWORD = "12345";
+const CORRECT_PASSWORD = "MKS2025";
 
 // مجموعة من الأذكار الإسلامية مع عدد مرات تكرارها
 const azkar = [
@@ -656,7 +656,7 @@ function checkPassword() {
   const loginScreen = document.getElementById('loginScreen');
   const appContent = document.getElementById('appContent');
   
-  if (passwordInput.value === 12345) {
+  if (passwordInput.value === CORRECT_PASSWORD) {
     // كلمة المرور صحيحة
     loginScreen.style.opacity = '0';
     setTimeout(() => {
