@@ -50,7 +50,6 @@
     display: flex;
     flex-direction: column;
     transition: var(--transition);
-    line-height: 1.6;
   }
   
   /* شاشة الدخول */
@@ -95,7 +94,6 @@
     color: var(--primary);
     margin-bottom: 20px;
     font-weight: 700;
-    font-size: 1.5rem;
   }
   
   .login-form {
@@ -187,8 +185,8 @@
   header {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #fff;
-    padding: 15px 20px;
-    font-size: 1.25rem;
+    padding: 20px;
+    font-size: 24px;
     font-weight: bold;
     box-shadow: var(--shadow);
     position: relative;
@@ -213,8 +211,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
   }
   
   .user-info {
@@ -224,44 +220,76 @@
     background: rgba(255, 255, 255, 0.2);
     padding: 8px 15px;
     border-radius: 20px;
-    font-size: 0.9rem;
   }
   
   .admin-controls {
     display: flex;
-    gap: 8px;
+    gap: 10px;
   }
   
-  .admin-btn, .theme-toggle, .logout-btn {
+  .admin-btn {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition);
-    font-size: 0.9rem;
   }
   
-  .admin-btn:hover, .theme-toggle:hover, .logout-btn:hover {
+  .admin-btn:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
   }
   
+  .theme-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  
   .theme-toggle:hover {
-    transform: rotate(30deg) scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+  }
+  
+  .logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  
+  .logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
   }
   
   .container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    max-width: 1200px;
+    padding: 20px;
+    max-width: 1000px;
     margin: 0 auto;
     width: 100%;
   }
@@ -271,19 +299,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 10px;
+    padding: 20px;
     animation: fadeIn 1s ease;
   }
   
   .mosque-icon {
-    font-size: 60px;
+    font-size: 80px;
     color: var(--primary);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     animation: float 3s ease-in-out infinite;
   }
   
   .welcome-text {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     max-width: 600px;
   }
   
@@ -291,27 +319,26 @@
     color: var(--primary);
     margin-bottom: 10px;
     font-weight: 700;
-    font-size: 1.5rem;
   }
   
   .welcome-text p {
-    font-size: 1rem;
+    font-size: 18px;
     line-height: 1.6;
   }
   
   .buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
-    padding: 20px 10px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 25px 15px;
     width: 100%;
   }
   
   button {
-    padding: 16px;
-    font-size: 1rem;
+    padding: 18px;
+    font-size: 18px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     color: white;
     cursor: pointer;
     transition: var(--transition);
@@ -319,10 +346,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     position: relative;
     overflow: hidden;
-    min-height: 60px;
   }
   
   button::after {
@@ -337,8 +363,8 @@
   }
   
   button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   }
   
   button:active {
@@ -360,9 +386,9 @@
   
   iframe {
     width: 100%;
-    height: 75vh;
+    height: 80vh;
     border: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: var(--shadow);
     display: none;
     opacity: 0;
@@ -388,20 +414,20 @@
   }
   
   .spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(44, 62, 80, 0.2);
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(44, 62, 80, 0.2);
     border-radius: 50%;
     border-top-color: var(--primary);
     animation: spin 1s ease-in-out infinite;
   }
   
   .progress-bar {
-    width: 200px;
-    height: 6px;
+    width: 250px;
+    height: 8px;
     background: rgba(44, 62, 80, 0.2);
-    border-radius: 3px;
-    margin-top: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
     overflow: hidden;
   }
   
@@ -409,7 +435,7 @@
     height: 100%;
     background: var(--primary);
     width: 0%;
-    border-radius: 3px;
+    border-radius: 4px;
     transition: width 0.3s ease;
   }
   
@@ -424,25 +450,25 @@
   
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-     50% { transform: translateY(-8px); }
+     50% { transform: translateY(-10px); }
   }
   
   .loading p {
-    margin-top: 15px;
-    font-size: 1rem;
+    margin-top: 20px;
+    font-size: 18px;
     color: var(--primary);
   }
   
   .azkar-container {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 15px 0;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
-    min-height: 180px;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -463,15 +489,11 @@
   .azkar-title {
     position: relative;
     z-index: 1;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-  }
-  
-  .azkar-title h3 {
-    font-size: 1.2rem;
+    gap: 10px;
   }
   
   .azkar-content {
@@ -481,38 +503,36 @@
   
   .zekr {
     animation: fadeIn 1s ease;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
   }
   
   .zekr-text {
-    font-size: 1.1rem;
+    font-size: 20px;
     line-height: 1.6;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 500;
   }
   
   .zekr-count {
-    font-size: 0.9rem;
+    font-size: 16px;
     opacity: 0.8;
   }
   
   .azkar-controls {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 10px;
+    margin-top: 20px;
     position: relative;
     z-index: 1;
-    flex-wrap: wrap;
   }
   
   .azkar-controls button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
+    padding: 10px 20px;
+    font-size: 16px;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
-    min-height: auto;
   }
   
   .azkar-controls button:hover {
@@ -523,9 +543,9 @@
   /* لوحة التحكم */
   .admin-panel {
     background: white;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px 0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
     box-shadow: var(--shadow);
     display: none;
   }
@@ -536,21 +556,20 @@
   
   .admin-panel h3 {
     color: var(--primary);
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-size: 1.2rem;
+    gap: 10px;
   }
   
   .login-history {
-    max-height: 250px;
+    max-height: 300px;
     overflow-y: auto;
-    margin-top: 12px;
+    margin-top: 15px;
     border: 1px solid #eee;
     border-radius: 8px;
-    padding: 8px;
+    padding: 10px;
   }
   
   .dark-mode .login-history {
@@ -560,9 +579,8 @@
   .login-item {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
+    padding: 10px;
     border-bottom: 1px solid #eee;
-    font-size: 0.9rem;
   }
   
   .dark-mode .login-item {
@@ -574,7 +592,7 @@
   }
   
   .login-time {
-    font-size: 0.8rem;
+    font-size: 12px;
     color: #777;
   }
   
@@ -583,15 +601,14 @@
   }
   
   .clear-history {
-    margin-top: 12px;
+    margin-top: 15px;
     background: var(--red);
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 0.9rem;
   }
   
   .clear-history:hover {
@@ -601,72 +618,39 @@
   footer {
     background: var(--secondary);
     color: white;
-    padding: 12px;
+    padding: 15px;
     margin-top: auto;
-    font-size: 0.8rem;
-  }
-  
-  /* وسائط الاستعلام للأجهزة المختلفة */
-  @media (max-width: 1200px) {
-    .container {
-      max-width: 1000px;
-    }
-  }
-  
-  @media (max-width: 992px) {
-    .container {
-      max-width: 800px;
-    }
-    
-    .buttons {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
+    font-size: 14px;
   }
   
   @media (max-width: 768px) {
     header {
-      padding: 12px 15px;
-      font-size: 1.1rem;
+      font-size: 20px;
+      padding: 15px;
     }
     
     .header-content {
       flex-direction: column;
-      gap: 8px;
-    }
-    
-    .user-info {
-      order: 2;
-      width: 100%;
-      justify-content: center;
-    }
-    
-    .admin-controls {
-      order: 1;
-      align-self: flex-end;
+      gap: 10px;
     }
     
     .buttons {
       grid-template-columns: 1fr;
-      gap: 12px;
-      padding: 15px 8px;
+      gap: 15px;
+      padding: 20px 10px;
     }
     
     button {
-      padding: 14px;
-      font-size: 0.95rem;
-      min-height: 55px;
+      padding: 16px;
+      font-size: 16px;
     }
     
     .zekr-text {
-      font-size: 1rem;
-    }
-    
-    .welcome-text h2 {
-      font-size: 1.3rem;
+      font-size: 18px;
     }
     
     .welcome-text p {
-      font-size: 0.95rem;
+      font-size: 16px;
     }
     
     .azkar-controls {
@@ -684,175 +668,7 @@
     
     .login-item {
       flex-direction: column;
-      gap: 4px;
-    }
-    
-    iframe {
-      height: 70vh;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .login-container {
-      padding: 20px 15px;
-    }
-    
-    .login-title {
-      font-size: 1.3rem;
-    }
-    
-    .input-group input {
-      padding: 12px 12px 12px 40px;
-      font-size: 15px;
-    }
-    
-    .input-group i {
-      left: 12px;
-    }
-    
-    .login-btn {
-      padding: 12px;
-      font-size: 15px;
-    }
-    
-    .header-content {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-    
-    .user-info {
-      order: initial;
-      width: auto;
-      font-size: 0.8rem;
-      padding: 6px 12px;
-    }
-    
-    .admin-controls {
-      order: initial;
-      align-self: center;
-    }
-    
-    .admin-btn, .theme-toggle, .logout-btn {
-      width: 32px;
-      height: 32px;
-      font-size: 0.8rem;
-    }
-    
-    .container {
-      padding: 10px;
-    }
-    
-    .welcome-screen {
-      padding: 15px 5px;
-    }
-    
-    .mosque-icon {
-      font-size: 50px;
-    }
-    
-    .welcome-text h2 {
-      font-size: 1.2rem;
-    }
-    
-    .welcome-text p {
-      font-size: 0.9rem;
-    }
-    
-    .buttons {
-      padding: 10px 5px;
-      gap: 10px;
-    }
-    
-    button {
-      padding: 12px;
-      font-size: 0.9rem;
-      min-height: 50px;
-    }
-    
-    .azkar-container {
-      padding: 15px;
-      min-height: 160px;
-    }
-    
-    .azkar-title h3 {
-      font-size: 1.1rem;
-    }
-    
-    .zekr-text {
-      font-size: 0.95rem;
-    }
-    
-    .zekr-count {
-      font-size: 0.85rem;
-    }
-    
-    iframe {
-      height: 65vh;
-      border-radius: 8px;
-    }
-    
-    .spinner {
-      width: 40px;
-      height: 40px;
-    }
-    
-    .progress-bar {
-      width: 180px;
-    }
-  }
-  
-  @media (max-width: 380px) {
-    .header-content {
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .user-info {
-      width: 100%;
-      justify-content: center;
-    }
-    
-    .admin-controls {
-      align-self: center;
-    }
-    
-    .login-title {
-      font-size: 1.2rem;
-    }
-    
-    .welcome-text h2 {
-      font-size: 1.1rem;
-    }
-    
-    button {
-      font-size: 0.85rem;
-    }
-    
-    .azkar-controls button {
-      min-width: 80px;
-      font-size: 0.8rem;
-      padding: 6px 12px;
-    }
-  }
-  
-  /* تحسينات للوضع الأفقي على الهواتف */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .login-screen {
-      overflow-y: auto;
-      padding: 10px;
-    }
-    
-    .login-container {
-      margin: 10px 0;
-    }
-    
-    .azkar-container {
-      min-height: 140px;
-      padding: 15px;
-    }
-    
-    .zekr-text {
-      font-size: 0.9rem;
+      gap: 5px;
     }
   }
 </style>
