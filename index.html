@@ -156,6 +156,19 @@
     transform: translateY(-2px);
   }
   
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .dark-mode .remember-me {
+    color: #ccc;
+  }
+  
   .error-message {
     color: var(--red);
     margin-top: 10px;
@@ -250,6 +263,25 @@
   .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: rotate(30deg);
+  }
+  
+  .logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  
+  .logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
   }
   
   .container {
@@ -656,6 +688,10 @@
           <i class="fas fa-lock"></i>
           <input type="password" id="passwordInput" placeholder="كلمة المرور" autocomplete="off">
         </div>
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe">
+          <label for="rememberMe">تذكر دخولي</label>
+        </div>
         <button class="login-btn" onclick="checkLogin()">
           <i class="fas fa-sign-in-alt"></i> دخول
         </button>
@@ -681,6 +717,9 @@
           </button>
           <button class="theme-toggle" id="themeToggle" title="تبديل المظهر">
             <i class="fas fa-moon"></i>
+          </button>
+          <button class="logout-btn" onclick="logout()" title="تسجيل الخروج">
+            <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
       </div>
@@ -812,6 +851,7 @@ let isAdmin = false;
 function checkLogin() {
   const usernameInput = document.getElementById('usernameInput');
   const passwordInput = document.getElementById('passwordInput');
+  const rememberMe = document.getElementById('rememberMe');
   const errorMessage = document.getElementById('errorMessage');
   const loginScreen = document.getElementById('loginScreen');
   const appContent = document.getElementById('appContent');
@@ -825,7 +865,7 @@ function checkLogin() {
     currentUsername = username;
     
     // التحقق إذا كان المستخدم مديراً
-    isAdmin = (username === "ELAMRAOUI"); // فقط المستخدم "admin" يعتبر مديراً
+    isAdmin = (username === "ELAMRAOUI"); // فقط المستخدم "ELAMRAOUI" يعتبر مديراً
     
     // تسجيل عملية الدخول
     const loginRecord = {
@@ -838,6 +878,14 @@ function checkLogin() {
     
     // حفظ سجل الدخول في localStorage
     localStorage.setItem('loginHistory', JSON.stringify(loginHistory));
+    
+    // حفظ بيانات الدخول إذا تم اختيار "تذكرني"
+    if (rememberMe.checked) {
+      rememberLogin(username, password);
+    } else {
+      // إذا لم يتم اختيار "تذكرني"، تأكد من مسح أي بيانات محفوظة
+      clearRememberedLogin();
+    }
     
     // تحديث واجهة المستخدم
     document.getElementById('currentUser').textContent = `مرحباً ${username}`;
@@ -867,6 +915,60 @@ function checkLogin() {
       passwordInput.style.borderColor = '';
     }, 3000);
   }
+}
+
+// حفظ بيانات الدخول
+function rememberLogin(username, password) {
+  const loginData = {
+    username: username,
+    password: password,
+    timestamp: new Date().getTime()
+  };
+  localStorage.setItem('rememberedLogin', JSON.stringify(loginData));
+}
+
+// مسح بيانات الدخول المحفوظة
+function clearRememberedLogin() {
+  localStorage.removeItem('rememberedLogin');
+}
+
+// التحقق من وجود بيانات دخول محفوظة
+function checkRememberedLogin() {
+  const rememberedLogin = JSON.parse(localStorage.getItem('rememberedLogin'));
+  
+  // إذا كانت هناك بيانات محفوظة ولم يتم انتهاء صلاحيتها (30 يوم)
+  if (rememberedLogin && (new Date().getTime() - rememberedLogin.timestamp) < (30 * 24 * 60 * 60 * 1000)) {
+    document.getElementById('usernameInput').value = rememberedLogin.username;
+    document.getElementById('passwordInput').value = rememberedLogin.password;
+    document.getElementById('rememberMe').checked = true;
+    
+    // يمكنك تفعيل الدخول التلقائي هنا إذا أردت:
+    // checkLogin();
+  }
+}
+
+// دالة تسجيل الخروج
+function logout() {
+  // مسح بيانات الدخول المحفوظة
+  clearRememberedLogin();
+  
+  // إخفاء محتوى التطبيق
+  document.getElementById('appContent').style.display = 'none';
+  
+  // إظهار شاشة الدخول
+  const loginScreen = document.getElementById('loginScreen');
+  loginScreen.style.display = 'flex';
+  setTimeout(() => {
+    loginScreen.style.opacity = '1';
+  }, 50);
+  
+  // إعادة تعيين حقول الدخول
+  document.getElementById('usernameInput').value = '';
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('rememberMe').checked = false;
+  
+  // إيقاف عرض الأذكار
+  clearInterval(azkarInterval);
 }
 
 // السماح بالدخول عند الضغط على Enter
@@ -1077,6 +1179,11 @@ function initApp() {
   // بدء عرض الأذكار بشكل تلقائي
   azkarInterval = setInterval(nextZekr, 10000);
 }
+
+// عند تحميل الصفحة، التحقق من وجود بيانات دخول محفوظة
+window.addEventListener('DOMContentLoaded', function() {
+  checkRememberedLogin();
+});
 </script>
 </body>
 </html>
